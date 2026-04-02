@@ -41,7 +41,7 @@ export const NodeActions = ({ nodeId, addChildNode, removeNode }: Props) => {
       {showInput && (
         <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white/90 p-2 shadow-sm">
           <input
-            className="min-w-[10rem] rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:bg-white"
+            className="min-w-40 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:bg-white"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Child name"
