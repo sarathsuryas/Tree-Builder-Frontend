@@ -5,13 +5,14 @@ type UseAutoScrollOptions = {
   behavior?: ScrollBehavior;
 };
 
-export const useAutoScroll = <T>(
-  dependency: T,
+export const useAutoScroll = (
+  dependency: number,
   options: UseAutoScrollOptions = {},
 ) => {
   const { threshold = 50, behavior = "smooth" } = options;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const shouldAutoScrollRef = useRef(true);
+  const previousDependencyRef = useRef(dependency);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -39,8 +40,16 @@ export const useAutoScroll = <T>(
 
   useEffect(() => {
     const container = containerRef.current;
+    const previousDependency = previousDependencyRef.current;
+    previousDependencyRef.current = dependency;
 
     if (!container) {
+      return;
+    }
+
+    const wasNodeAdded = dependency > previousDependency;
+
+    if (!wasNodeAdded) {
       return;
     }
 
