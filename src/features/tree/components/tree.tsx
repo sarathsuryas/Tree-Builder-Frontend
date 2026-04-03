@@ -3,7 +3,15 @@ import { useTree } from "../hooks/useTree";
 import { TreeNode } from "./treeNode";
 
 export const Tree = () => {
-  const { tree, loading, addRootNode, addChildNode, removeNode, toggleNode } =
+  const {
+    tree,
+    loading,
+    error,
+    addRootNode,
+    addChildNode,
+    removeNode,
+    toggleNode,
+  } =
     useTree();
   const [name, setName] = useState("");
   const rootCount = tree.length;
@@ -16,20 +24,20 @@ export const Tree = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.18),_transparent_35%),linear-gradient(180deg,#fffdf7_0%,#f8fafc_100%)] px-4 py-10">
-        <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/70 bg-white/75 p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.18),transparent_35%),linear-gradient(180deg,#fffdf7_0%,#f8fafc_100%)] px-4 py-10">
+        <div className="mx-auto max-w-5xl rounded-4xl border border-white/70 bg-white/75 p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur">
           <div className="h-4 w-32 animate-pulse rounded-full bg-slate-200" />
-          <div className="mt-4 h-24 animate-pulse rounded-[1.5rem] bg-slate-100" />
-          <div className="mt-3 h-24 animate-pulse rounded-[1.5rem] bg-slate-100" />
+          <div className="mt-4 h-24 animate-pulse rounded-3xl bg-slate-100" />
+          <div className="mt-3 h-24 animate-pulse rounded-3xl bg-slate-100" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.2),_transparent_30%),linear-gradient(180deg,#fffdf7_0%,#f8fafc_100%)] px-4 py-10 text-slate-900">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.2),transparent_30%),linear-gradient(180deg,#fffdf7_0%,#f8fafc_100%)] px-4 py-10 text-slate-900">
       <div className="mx-auto max-w-5xl">
-        <div className="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur sm:p-8">
+        <div className="rounded-4xl border border-white/70 bg-white/80 p-6 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-700">
@@ -78,6 +86,12 @@ export const Tree = () => {
               </button>
             </div>
           </div>
+
+          {error && (
+            <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+              {error}
+            </div>
+          )}
 
           <div className="mt-8">
             {tree.length === 0 ? (

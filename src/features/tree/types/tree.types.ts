@@ -4,4 +4,5 @@ export type TreeNodeType = {
   parentId?: string;
   children: TreeNodeType[];
   isExpanded?: boolean;
+  isPending?: boolean;
 };
