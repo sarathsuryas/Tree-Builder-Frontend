@@ -1,6 +1,12 @@
 import { useState } from "react";
+import { useAutoScroll } from "../hooks/useAutoScroll";
 import { useTree } from "../hooks/useTree";
+import type { TreeNodeType } from "../types/tree.types";
 import { TreeNode } from "./treeNode";
+
+const countNodes = (nodes: TreeNodeType[]): number => {
+  return nodes.reduce((total, node) => total + 1 + countNodes(node.children), 0);
+};
 
 export const Tree = () => {
   const {
@@ -15,6 +21,8 @@ export const Tree = () => {
     useTree();
   const [name, setName] = useState("");
   const rootCount = tree.length;
+  const totalNodeCount = countNodes(tree);
+  const treeContainerRef = useAutoScroll(totalNodeCount, { threshold: 50 });
 
   const handleAdd = async () => {
     if (!name.trim()) return;
@@ -35,9 +43,9 @@ export const Tree = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.2),transparent_30%),linear-gradient(180deg,#fffdf7_0%,#f8fafc_100%)] px-4 py-10 text-slate-900">
-      <div className="mx-auto max-w-5xl">
-        <div className="rounded-4xl border border-white/70 bg-white/80 p-6 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur sm:p-8">
+    <div className="h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.2),transparent_30%),linear-gradient(180deg,#fffdf7_0%,#f8fafc_100%)]  text-slate-900">
+      <div className="flex h-full w-full flex-col">
+      <div className="rounded-4xl border border-white/70 bg-white/80 p-6 shadow-[0_20px_40px_-20px_rgba(15,23,42,0.35)] backdrop-blur sm:p-8 flex flex-col h-full">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-700">
@@ -46,10 +54,6 @@ export const Tree = () => {
               <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
                 Shape your hierarchy with clean, expandable nodes.
               </h1>
-              <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
-                Add root items, branch them into children, and manage the
-                structure in a calmer, more readable workspace.
-              </p>
             </div>
 
             <div className="rounded-3xl border border-amber-200 bg-amber-50 px-5 py-4">
@@ -93,7 +97,7 @@ export const Tree = () => {
             </div>
           )}
 
-          <div className="mt-8">
+          <div className="mt-8 flex-1 min-h-0">
             {tree.length === 0 ? (
               <div className="rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50/80 px-6 py-12 text-center">
                 <p className="text-lg font-semibold tracking-tight text-slate-900">
@@ -105,16 +109,21 @@ export const Tree = () => {
                 </p>
               </div>
             ) : (
-              <div className="space-y-2">
-                {tree.map((node) => (
-                  <TreeNode
-                    key={node.id}
-                    node={node}
-                    toggleNode={toggleNode}
-                    addChildNode={addChildNode}
-                    removeNode={removeNode}
-                  />
-                ))}
+            <div
+               ref={treeContainerRef}
+             className="h-full overflow-y-auto rounded-[1.75rem] border border-slate-200/80 bg-white/50 p-2 pr-3"
+>
+                <div className="space-y-2 pb-2">
+                  {tree.map((node) => (
+                    <TreeNode
+                      key={node.id}
+                      node={node}
+                      toggleNode={toggleNode}
+                      addChildNode={addChildNode}
+                      removeNode={removeNode}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </div>
